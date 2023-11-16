@@ -1,4 +1,6 @@
 using eTickets.Data;
+using eTickets.Data.Services;
+using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+// Services Configuration
+builder.Services.AddTransient<IActorsService, ActorsService>();
 
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation().AddControllersAsServices();
 
 var app = builder.Build();
 

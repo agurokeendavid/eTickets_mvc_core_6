@@ -16,7 +16,7 @@ public class MoviesController : Controller
 
     public async Task<IActionResult>  Index()
     {
-        List<Movie> allMovies = await _context.Movies.ToListAsync();
+        List<Movie> allMovies = await _context.Movies.Include(n => n.Cinema).OrderBy(n => n.Name).ToListAsync();
         return View(allMovies);
     }
 }
