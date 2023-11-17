@@ -1,29 +1,39 @@
-﻿namespace eTickets.Data.Base;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace eTickets.Data.Base;
 
 public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityBase, new()
 {
-    public Task<IEnumerable<T>> GetAllAsync()
+    private readonly AppDbContext _dbContext;
+
+    public EntityBaseRepository(AppDbContext dbContext)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
+    }
+    
+    public async Task<IEnumerable<T>> GetAllAsync() => await _dbContext.Set<T>().ToListAsync();
+
+    public async Task<T> GetByIdAsync(int id) => await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Id == id);
+
+    public async Task AddAsync(T model)
+    {
+        await _dbContext.Set<T>().AddAsync(model);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<T> GetByIdAsync(int id)
+    public async Task UpdateAsync(int id, T newModel)
     {
-        throw new NotImplementedException();
+        EntityEntry entityEntry = _dbContext.Entry<T>(newModel);
+        entityEntry.State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task AddAsync(T model)
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<T> UpdateAsync(int id, T newModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Id == id);
+        EntityEntry entityEntry = _dbContext.Entry<T>(entity);
+        entityEntry.State = EntityState.Deleted;
+        await _dbContext.SaveChangesAsync();
     }
 }
