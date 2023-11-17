@@ -50,6 +50,7 @@ public class ActorsController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id", "FullName", "ProfilePictureURL", "Bio")]Actor actor)
     {
         if (!ModelState.IsValid)
@@ -57,8 +58,13 @@ public class ActorsController : Controller
             return View(actor);
         }
         
-        await _service.UpdateAsync(id, actor);
-        return RedirectToAction(nameof(Index));
+        if (id == actor.Id)
+        {
+            await _service.UpdateAsync(id, actor);
+            return RedirectToAction(nameof(Index));
+        }
+        
+        return View(actor);
     }
     
     // Get: Actors/Delete/1
@@ -75,6 +81,7 @@ public class ActorsController : Controller
     }
 
     [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var actorDetails = await _service.GetByIdAsync(id);
