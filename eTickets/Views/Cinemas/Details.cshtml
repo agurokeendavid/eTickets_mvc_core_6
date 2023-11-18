@@ -1,0 +1,44 @@
+﻿@model Cinema
+@{
+    ViewData["Title"] = "View Cinema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h1>@ViewData["Title"]</h1>
+        </p>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="form-group text-center">
+                    <img class="border-info rounded-circle" style="max-width: 150px;" id="CinemaLogoPreview" alt="Cinema Logo Preview">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Logo" class="control-label"></label>
+                    <input type="text" asp-for="Logo" class="form-control" readonly="readonly">
+                    <span asp-validation-for="Logo" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input type="text" asp-for="Name" class="form-control" readonly="readonly">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input type="text" asp-for="Description" class="form-control" readonly="readonly">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <a class="btn btn-outline-success float-end" asp-action="Edit" asp-route-id="@Model.Id">Update</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Show all</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/modules/cinemas/details.js"></script>
+}

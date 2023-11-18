@@ -26,13 +26,17 @@
                     <td class="align-middle">@Html.DisplayFor(m => item.Name)</td>
                     <td class="align-middle">@Html.DisplayFor(m => item.Description)</td>
                     <td class="align-middle">
-                        <a href="#" class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i>Edit</a> |
-                        <a href="#" class="btn btn-outline-info"><i class="bi bi-eye"></i>Details</a> |
-                        <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i>Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i>Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="bi bi-eye"></i>Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="bi bi-trash"></i>Delete</a>
                     </td>
                 </tr>
             }
             </tbody>
         </table>
     </div>
+</div>
+
+<div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
+    <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create Cinema</a>
 </div>

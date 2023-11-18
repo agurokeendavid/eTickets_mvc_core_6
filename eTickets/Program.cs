@@ -16,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Services Configuration
 builder.Services.AddTransient<IActorsService, ActorsService>();
 builder.Services.AddTransient<IProducersService, ProducersService>();
-
+builder.Services.AddScoped<ICinemasService, CinemasService>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation().AddControllersAsServices();
 
 var app = builder.Build();
