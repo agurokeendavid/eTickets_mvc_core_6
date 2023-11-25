@@ -14,9 +14,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // Services Configuration
-builder.Services.AddTransient<IActorsService, ActorsService>();
-builder.Services.AddTransient<IProducersService, ProducersService>();
+builder.Services.AddScoped<IActorsService, ActorsService>();
+builder.Services.AddScoped<IProducersService, ProducersService>();
 builder.Services.AddScoped<ICinemasService, CinemasService>();
+builder.Services.AddScoped<IMoviesService, MoviesService>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation().AddControllersAsServices();
 
 var app = builder.Build();

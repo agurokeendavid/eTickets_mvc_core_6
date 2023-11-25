@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace eTickets.Data.Base;
@@ -13,6 +14,12 @@ public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class,
     }
     
     public async Task<IEnumerable<T>> GetAllAsync() => await _dbContext.Set<T>().ToListAsync();
+    public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+    {
+        IQueryable<T> query = _dbContext.Set<T>();
+        query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+        return await query.ToListAsync();
+    }
 
     public async Task<T> GetByIdAsync(int id) => await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Id == id);
 
