@@ -5,6 +5,8 @@ namespace eTickets.ViewModels;
 
 public class NewMovieViewModel
 {
+    public int Id { get; set; }
+    
     [Display(Name = "Movie name")]
     [Required(ErrorMessage = "{0} is required")]
     public string? Name { get; set; }

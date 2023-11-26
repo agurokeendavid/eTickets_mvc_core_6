@@ -26,12 +26,16 @@ namespace eTickets.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProfilePictureURL")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -61,13 +65,17 @@ namespace eTickets.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Logo")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -114,6 +122,52 @@ namespace eTickets.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("eTickets.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("eTickets.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("eTickets.Models.Producer", b =>
                 {
                     b.Property<int>("Id")
@@ -121,17 +175,44 @@ namespace eTickets.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProfilePictureURL")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("Producers");
+                });
+
+            modelBuilder.Entity("eTickets.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShoppingCartId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("eTickets.Models.Actor_Movie", b =>
@@ -172,6 +253,36 @@ namespace eTickets.Migrations
                     b.Navigation("Producer");
                 });
 
+            modelBuilder.Entity("eTickets.Models.OrderItem", b =>
+                {
+                    b.HasOne("eTickets.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eTickets.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("eTickets.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("eTickets.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("eTickets.Models.Actor", b =>
                 {
                     b.Navigation("Actors_Movies");
@@ -185,6 +296,11 @@ namespace eTickets.Migrations
             modelBuilder.Entity("eTickets.Models.Movie", b =>
                 {
                     b.Navigation("Actors_Movies");
+                });
+
+            modelBuilder.Entity("eTickets.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("eTickets.Models.Producer", b =>
