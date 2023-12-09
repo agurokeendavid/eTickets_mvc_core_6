@@ -4,7 +4,6 @@ using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace eTickets.Controllers;
 
