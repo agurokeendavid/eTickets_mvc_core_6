@@ -1,4 +1,5 @@
 ﻿using eTickets.Data;
+using eTickets.Data.Static;
 using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
@@ -62,7 +63,37 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel viewModel)
     {
+        if (!ModelState.IsValid)
+            return View(viewModel);
         
+        var user = await _userManager.FindByEmailAsync(viewModel.EmailAddress);
+        if (user != null)
+        {
+            TempData["Error"] = "This email address is already in use.";
+            return View(viewModel);
+        }
+
+        var newUser = new ApplicationUser()
+        {
+            FullName = viewModel.FullName,
+            Email = viewModel.EmailAddress,
+            UserName = viewModel.EmailAddress
+        };
+        var newUserResponse = await _userManager.CreateAsync(newUser, viewModel.Password);
+
+        if (newUserResponse.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+            return View("RegisterCompleted");
+        }
+
         return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Movies");
     }
 }

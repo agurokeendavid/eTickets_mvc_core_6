@@ -28,9 +28,12 @@
                     <input type="text" asp-for="Bio" class="form-control" readonly>
                     <span asp-validation-for="Bio" class="text-danger"></span>
                 </div>
-
                 <div class="mb-3">
-                    <a class="btn btn-outline-success float-end" asp-action="Edit" asp-controller="Actors" asp-route-id="@Model.Id">Update</a>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+
+                        <a class="btn btn-outline-success float-end" asp-action="Edit" asp-route-id="@Model.Id">Update</a>
+                    }
                     <a class="btn btn-outline-secondary" asp-action="Index">Show all</a>
                 </div>
             </div>
@@ -39,6 +42,6 @@
 </div>
 
 @section Scripts
-{
+    {
     <script type="text/javascript" src="~/modules/actors/details.js"></script>
 }
