@@ -1,11 +1,12 @@
-﻿using eTickets.Data;
-using eTickets.Data.Services;
+﻿using eTickets.Data.Services;
+using eTickets.Data.Static;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers;
 
+[Authorize(Roles = UserRoles.Admin)]
 public class ProducersController : Controller
 {
     private readonly IProducersService _service;
@@ -15,6 +16,7 @@ public class ProducersController : Controller
         _service = service;
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         IEnumerable<Producer> allProducers = await _service.GetAllAsync();
@@ -22,6 +24,7 @@ public class ProducersController : Controller
     }
 
     // GET: producers/details/1
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int id)
     {
         var producer = await _service.GetByIdAsync(id);
@@ -97,10 +100,6 @@ public class ProducersController : Controller
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var producer = await _service.GetByIdAsync(id);
-        if (producer is null)
-        {
-            return View("NotFound");
-        }
         await _service.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
